@@ -23,6 +23,14 @@ import json
 def print_temp(w):
     return '<p>The temperature is %s degrees Fahrenheit.</p>\n' % (w['main']['temp'])
 
+# this method is for tabulating together the temperatures
+# a kilometer to the North, South, East, and West from
+# the input of the latitudinal and longitudinal coordinates
+# --> PLACEHOLDER <--
+# def tabulate_temps(int pseudovariable){
+        
+# }
+
 # looks for an 'application' callable by default
 application = Flask(__name__)
 
