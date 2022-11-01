@@ -20,8 +20,8 @@ import json
 #         '&units=imperial&appid=75ee49c19c9fac22f81ffcac43b80552').json()
 
 # print the temperature
-# def print_temp(w):
-#     return '<p>The temperature is %s degrees Fahrenheit.' + '</p>\n' % (w['main']['temp'])
+def print_temp(w):
+    return '<p>The temperature is %s degrees Fahrenheit.' % (w['main']['temp']) + '</p>\n'
 
 
 # this method is for tabulating together the temperatures
@@ -37,7 +37,7 @@ def tabulate_temps(a=None, b=None):
     print("Value of a : " + str(a))
     print("Value of b : " + str(b))
 
-    return '<p>Test<p>'
+    return '<p>Latitude: ' + str(a) + '; Longitude: ' + str(b) + '<p>'
 
 # looks for an 'application' callable by default
 application = Flask(__name__)
@@ -48,9 +48,9 @@ header_text = tabulate_temps(1,2) + '''
 footer_text = '</body>\n</html>'
 
 # add a rule for the index page
-application.add_url_rule('/', 'index', (lambda: header_text))
-        #print_temp(requests.get(
-        # 'https://api.openweathermap.org/data/2.5/weather?lat=41.9&lon=-87.6&units=imperial&appid=75ee49c19c9fac22f81ffcac43b80552').json()) + footer_text))
+application.add_url_rule('/', 'index', (lambda: header_text +
+         print_temp(requests.get(
+         'https://api.openweathermap.org/data/2.5/weather?lat=41.9&lon=-87.6&units=imperial&appid=75ee49c19c9fac22f81ffcac43b80552').json()) + footer_text))
 
 if __name__ == "__main__":
     # It is best to reset the below variable to false for a production deployment
