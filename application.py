@@ -35,7 +35,7 @@ LON = -87.6
 # South, East, and West from the input of supplied latitudinal
 # and longitudinal coordinates
 
-def tabulate_temps(a=None, b=None):
+def generate_compass(a=None, b=None):
     temp_center = requests.get('https://api.openweathermap.org/data/2.5/weather?lat=' + str(LAT) + '&lon=' + str(LON) + '&units=imperial&' + 'appid=' + OPENWEATHER_APP_ID).json()['main']['temp']
 
     temp_kilometer_away_north = requests.get('https://api.openweathermap.org/data/2.5/weather?lat=' + str(LAT + 1) + '&lon=' + str(LON) + '&units=imperial&' + 'appid=' + OPENWEATHER_APP_ID).json()['main']['temp']
@@ -48,15 +48,18 @@ def tabulate_temps(a=None, b=None):
     row_middle = '<tr><td>%s°F</td><td>%s°F</td><td>%s°F</td>' % (temp_kilometer_away_west, temp_center, temp_kilometer_away_east)
     row_bottom = '<tr><td>/</td><td>%s°F</td><td>\</td>' % temp_kilometer_away_south
 
-    compass_table = '<table class="dead_center">' + row_top + row_middle + row_bottom + '</table>'
+    compass = '<body class="dead_center"><table>' + row_top + row_middle + row_bottom + '</table>' + '''
+            <button class="below_center";type="button">Click Me!</button>
+        </body>
+    '''
 
-    return compass_table
+    return compass
 
 # looks for an 'application' callable by default
 application = Flask(__name__)
 
 # some bits of text for the page
-header_text = tabulate_temps(LAT,LON) + '''
+header_text = generate_compass(LAT,LON) + '''
     <html>
         <head>
             <link rel="stylesheet" href="static/styles.css">
