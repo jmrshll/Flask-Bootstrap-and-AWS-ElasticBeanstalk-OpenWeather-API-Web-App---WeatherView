@@ -48,7 +48,7 @@ def tabulate_temps(a=None, b=None):
     row_middle = '<tr><td>%s°F</td><td>%s°F</td><td>%s°F</td>' % (temp_kilometer_away_west, temp_center, temp_kilometer_away_east)
     row_bottom = '<tr><td>/</td><td>%s°F</td><td>\</td>' % temp_kilometer_away_south
 
-    compass_table = '<table>' + row_top + row_middle + row_bottom + '</table>'
+    compass_table = '<table class="dead_center">' + row_top + row_middle + row_bottom + '</table>'
 
     return compass_table
 

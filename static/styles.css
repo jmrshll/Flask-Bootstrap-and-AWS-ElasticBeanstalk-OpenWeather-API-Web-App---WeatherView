@@ -5,3 +5,14 @@ table, th, td {
     margin-right: auto;
     text-align: center;
 }
+
+.dead_center {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 30%;
+    height: 30%;
+    margin: auto;
+}
