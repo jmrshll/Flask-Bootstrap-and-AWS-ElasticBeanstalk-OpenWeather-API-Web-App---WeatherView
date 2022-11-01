@@ -44,9 +44,9 @@ def tabulate_temps(a=None, b=None):
     temp_kilometer_away_west = requests.get('https://api.openweathermap.org/data/2.5/weather?lat=' + str(LAT - 1) + '&lon=' + str(LON - 1) + '&units=imperial&' + 'appid=' + OPENWEATHER_APP_ID).json()['main']['temp']
 
     # a simple graphical compass display using a 3x3 HTML table
-    row_top = '<tr><td>\</td><td>%s</td><td>/</td>' % temp_kilometer_away_north
-    row_middle = '<tr><td>%s</td><td>%s</td><td>%s</td>' % (temp_kilometer_away_west, temp_center, temp_kilometer_away_east)
-    row_bottom = '<tr><td>/</td><td>%s</td><td>\</td>' % temp_kilometer_away_south
+    row_top = '<tr><td>\</td><td>%s°F</td><td>/</td>' % temp_kilometer_away_north
+    row_middle = '<tr><td>%s°F</td><td>%s°F</td><td>%s°F</td>' % (temp_kilometer_away_west, temp_center, temp_kilometer_away_east)
+    row_bottom = '<tr><td>/</td><td>%s°F</td><td>\</td>' % temp_kilometer_away_south
 
     compass_table = '<table>' + row_top + row_middle + row_bottom + '</table>'
 
