@@ -7,6 +7,9 @@ import requests
 
 import json
 
+LAT = 41.9
+LON = 87.6
+
 # OpenWeatherMap API Key: 75ee49c19c9fac22f81ffcac43b80552
 
 # Main calls, first below is lat/long in imperial units
@@ -43,14 +46,15 @@ def tabulate_temps(a=None, b=None):
 application = Flask(__name__)
 
 # some bits of text for the page
-header_text = tabulate_temps(1,2) + '''
+header_text = tabulate_temps(LAT,LON) + '''
     <html>\n<head> <title>WeatherView</title> </head>\n<body>'''
+
 footer_text = '</body>\n</html>'
 
 # add a rule for the index page
 application.add_url_rule('/', 'index', (lambda: header_text +
          print_temp(requests.get(
-         'https://api.openweathermap.org/data/2.5/weather?lat=41.9&lon=-87.6&units=imperial&appid=75ee49c19c9fac22f81ffcac43b80552').json()) + footer_text))
+         'https://api.openweathermap.org/data/2.5/weather?lat=' + str(LAT) + '&lon=' + str(LON) + '&units=imperial&appid=75ee49c19c9fac22f81ffcac43b80552').json()) + footer_text))
 
 if __name__ == "__main__":
     # It is best to reset the below variable to false for a production deployment
