@@ -1,4 +1,5 @@
 from flask import Flask
+from flask import request
 
 # Python reportMissingModuleSource error from "import requests" below
 # is caused by the fact that the virtual environment (virt)
@@ -36,20 +37,29 @@ LON = -87.6
 # and longitudinal coordinates
 
 def generate_compass(a=None, b=None):
-    temp_center = requests.get('https://api.openweathermap.org/data/2.5/weather?lat=' + str(LAT) + '&lon=' + str(LON) + '&units=imperial&' + 'appid=' + OPENWEATHER_APP_ID).json()['main']['temp']
+    temp_center = requests.get('https://api.openweathermap.org/data/2.5/weather?lat=' + str(a) + '&lon=' + str(b) + '&units=imperial&' + 'appid=' + OPENWEATHER_APP_ID).json()['main']['temp']
 
-    temp_kilometer_away_north = requests.get('https://api.openweathermap.org/data/2.5/weather?lat=' + str(LAT + 1) + '&lon=' + str(LON) + '&units=imperial&' + 'appid=' + OPENWEATHER_APP_ID).json()['main']['temp']
-    temp_kilometer_away_south = requests.get('https://api.openweathermap.org/data/2.5/weather?lat=' + str(LAT - 1) + '&lon=' + str(LON) + '&units=imperial&' + 'appid=' + OPENWEATHER_APP_ID).json()['main']['temp']
-    temp_kilometer_away_east = requests.get('https://api.openweathermap.org/data/2.5/weather?lat=' + str(LAT) + '&lon=' + str(LON + 1) + '&units=imperial&' + 'appid=' + OPENWEATHER_APP_ID).json()['main']['temp']
-    temp_kilometer_away_west = requests.get('https://api.openweathermap.org/data/2.5/weather?lat=' + str(LAT - 1) + '&lon=' + str(LON - 1) + '&units=imperial&' + 'appid=' + OPENWEATHER_APP_ID).json()['main']['temp']
+    temp_kilometer_away_north = requests.get('https://api.openweathermap.org/data/2.5/weather?lat=' + str(a + 1) + '&lon=' + str(b) + '&units=imperial&' + 'appid=' + OPENWEATHER_APP_ID).json()['main']['temp']
+    temp_kilometer_away_south = requests.get('https://api.openweathermap.org/data/2.5/weather?lat=' + str(a - 1) + '&lon=' + str(b) + '&units=imperial&' + 'appid=' + OPENWEATHER_APP_ID).json()['main']['temp']
+    temp_kilometer_away_east = requests.get('https://api.openweathermap.org/data/2.5/weather?lat=' + str(a) + '&lon=' + str(b + 1) + '&units=imperial&' + 'appid=' + OPENWEATHER_APP_ID).json()['main']['temp']
+    temp_kilometer_away_west = requests.get('https://api.openweathermap.org/data/2.5/weather?lat=' + str(a - 1) + '&lon=' + str(b - 1) + '&units=imperial&' + 'appid=' + OPENWEATHER_APP_ID).json()['main']['temp']
 
     # a simple graphical compass display using a 3x3 HTML table
     row_top = '<tr><td>\</td><td>%s°F</td><td>/</td>' % temp_kilometer_away_north
     row_middle = '<tr><td>%s°F</td><td>%s°F</td><td>%s°F</td>' % (temp_kilometer_away_west, temp_center, temp_kilometer_away_east)
     row_bottom = '<tr><td>/</td><td>%s°F</td><td>\</td>' % temp_kilometer_away_south
 
+    # compass assembly with coordinate search form at the bottom
     compass = '<body class="dead_center"><table>' + row_top + row_middle + row_bottom + '</table>' + '''
-            <button class="below_center";type="button">Click Me!</button>
+            <form action="http://127.0.0.1:8080/results">
+                <fieldset>
+                    <label for="lat">Latitude</label>
+                    <input type="text" id="lat" name="lat" placeholder="Enter your latitude" required />
+                    <label for="lon">Longitude</label>
+                    <input type="text" id="lon" name="lon" placeholder="Enter your longitude" required />
+                    <input type="submit" value="Search"/>
+                </fieldset>
+            </form>
         </body>
     '''
 
@@ -59,18 +69,26 @@ def generate_compass(a=None, b=None):
 application = Flask(__name__)
 
 # some bits of text for the page
-header_text = generate_compass(LAT,LON) + '''
-    <html>
-        <head>
-            <link rel="stylesheet" href="static/styles.css">
-                <title>WeatherView</title>
-        </head>
-    <body>'''
+def header_text(lat, lon):
+    return generate_compass(lat,lon) + '''
+        <html>
+            <head>
+                <link rel="stylesheet" href="static/styles.css">
+                    <title>WeatherView</title>
+            </head>
+        <body>'''
 
 footer_text = '</body>\n</html>'
 
 # add a rule for the index page
-application.add_url_rule('/', 'index', (lambda: header_text + footer_text))
+application.add_url_rule('/', 'index', (lambda: header_text(LAT,LON) + footer_text))
+
+# URL routing for results after coordinate search form submitted, with coordinates received as URL argument parameters
+@application.route('/results', methods=['GET'])
+def results():
+    lat = request.args.get('lat', default = LAT, type = float)
+    lon = request.args.get('lon', default = LON, type = float)
+    return header_text(lat,lon) + footer_text
 
 if __name__ == "__main__":
     # It is best to reset the below variable to false for a production deployment
