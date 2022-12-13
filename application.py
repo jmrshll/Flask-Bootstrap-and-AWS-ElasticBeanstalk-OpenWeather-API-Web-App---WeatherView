@@ -51,7 +51,7 @@ def generate_compass(a=None, b=None):
 
     # compass assembly with coordinate search form at the bottom
     compass = '<body class="dead_center"><table>' + row_top + row_middle + row_bottom + '</table>' + '''
-            <form action="http://127.0.0.1:8080/results">
+            <form action="http://weatherview-demo-env.eba-rt2csgfr.us-west-1.elasticbeanstalk.com/results">
                 <fieldset>
                     <label for="lat">Latitude</label>
                     <input type="text" id="lat" name="lat" placeholder="Enter your latitude" required />
@@ -94,5 +94,5 @@ def results():
 if __name__ == "__main__":
     # It is best to reset the below variable to false for a production deployment
    application.debug = True
-   application.run(host="0.0.0.0", port=8080, threaded=True)
+   application.run()
    
