@@ -75,8 +75,9 @@ def header_text(lat, lon):
             <head>
                 <link rel="stylesheet" href="static/styles.css">
                     <title>WeatherView</title>
+                    <body style="text-align:center">Latitude: %s Longitude: %s</body>
             </head>
-        <body>'''
+        <body>''' % (lat, lon)
 
 footer_text = '</body>\n</html>'
 
