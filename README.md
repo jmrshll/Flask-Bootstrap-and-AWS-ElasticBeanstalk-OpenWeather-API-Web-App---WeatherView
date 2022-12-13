@@ -1,1 +1,1 @@
-Hello world.
+Enter longitudinal and latitudinal coordinates to get a graphical map showing the temperature at those coordinates along with the temperature data of the surrounding regions a degree or latitude or longitude away.
